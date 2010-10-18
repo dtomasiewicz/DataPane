@@ -6,9 +6,9 @@
 		protected static $_config;
 		
 		public static function init($config) {
-			self::$_sources = array();
+			self::$_connections = array();
 			self::$_config = $config + array(
-				'source' => array()
+				'connections' => array()
 			);
 		}
 		
