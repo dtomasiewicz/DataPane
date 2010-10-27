@@ -10,12 +10,15 @@
 		public $type;
 		public $fields = null;
 		public $from = null;
+		public $table = null;
 		public $where = array();
 		public $order = null;
 		public $limit = null;
 		public $offset = null;
 		public $having = array();
 		public $group = null;
+		public $set = null;
+		public $values = null;
 		
 		public function __construct($type) {
 			$this->type = $type;
@@ -31,8 +34,13 @@
 			return $this;
 		}
 		
-		public function where() {
-			$this->where = func_get_args();
+		public function table($table) {
+			$this->table = $table;
+			return $this;
+		}
+		
+		public function where($conditions) {
+			$this->where[] = (array) $conditions;
 			return $this;
 		}
 		
@@ -54,8 +62,8 @@
 			return $this;
 		}
 		
-		public function having() {
-			$this->having = func_get_args();
+		public function having($conditions) {
+			$this->having[] = (array) $conditions;
 			return $this;
 		}
 		
@@ -64,16 +72,33 @@
 			return $this;
 		}
 		
+		public function set($set) {
+			$this->set = $set;
+			return $this;
+		}
+		
+		public function values($values) {
+			$this->values = $values;
+		}
+		
 		public function connection($connection = null) {
 			$this->connection = $connection;
 			return $this;
 		}
 		
-		public function prepare($connection = null) {
-			return Data::connection($connection)->prepare($this);
+		public function prepare($driver_options = array(), $connection = null) {
+			return Data::connection($connection)->prepare($this, $driver_options);
 		}
 		
-		public function exec($params = null, $connection = null) {
-			return Data::connection($connection)->execute($this);
+		public function execute($params = array(), $connection = null) {
+			return $this->prepare(array(), $connection)->execute((array)$params);
+		}
+		
+		public function exec($params = array(), $connection = null) {
+			return $this->execute((array)$params, $connection);
+		}
+		
+		public function getSQL($connection = null) {
+			return Data::connection($connection)->getSQL($this);
 		}
 	}

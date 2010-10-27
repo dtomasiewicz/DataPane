@@ -1,6 +1,7 @@
 <?php
 	namespace DataPane\Driver\PDO;
-	use \PDO;
+	use \PDO,
+	    \DataPane\Query;
 	
 	class Connection extends PDO implements \DataPane\Connection {
 		public function __construct($config) {
@@ -10,17 +11,20 @@
 		}
 		
 		public function prepare($sql, $driver_options = array()) {
-			if($sql instanceof \DataPane\Query) {
-				switch($this->getAttribute(PDO::ATTR_DRIVER_NAME)) {
-					case 'mysql':
-						$sql = call_user_func(array('DataPane\\Platform\\MySQL', 'parseQuery'), $sql);
-						break;
-					default:
-						//@todo exception
-						exit('Invalid PDO driver.');
-				}
+			if($sql instanceof Query) {
+				$sql = $this->getSQL($sql);
 			}
 			
 			return parent::prepare($sql, $driver_options);
+		}
+		
+		public function getSQL(Query $query) {
+			switch($this->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+				case 'mysql':
+					return call_user_func(array('DataPane\\Platform\\MySQL', 'parseQuery'), $query);
+				default:
+					//@todo exception
+					exit('Invalid PDO driver.');
+			}
 		}
 	}
