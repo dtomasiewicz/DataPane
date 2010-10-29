@@ -10,6 +10,8 @@
 		public $type;
 		public $fields = null;
 		public $from = null;
+		public $tables = null;
+		public $into = null;
 		public $table = null;
 		public $where = array();
 		public $order = null;
@@ -35,6 +37,11 @@
 		}
 		
 		public function table($table) {
+			$this->table = $table;
+			return $this;
+		}
+		
+		public function into($table) {
 			$this->table = $table;
 			return $this;
 		}
@@ -81,21 +88,12 @@
 			$this->values = $values;
 		}
 		
-		public function connection($connection = null) {
-			$this->connection = $connection;
-			return $this;
-		}
-		
 		public function prepare($driver_options = array(), $connection = null) {
 			return Data::connection($connection)->prepare($this, $driver_options);
 		}
 		
 		public function execute($params = array(), $connection = null) {
 			return $this->prepare(array(), $connection)->execute((array)$params);
-		}
-		
-		public function exec($params = array(), $connection = null) {
-			return $this->execute((array)$params, $connection);
 		}
 		
 		public function getSQL($connection = null) {

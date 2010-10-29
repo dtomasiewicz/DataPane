@@ -10,9 +10,11 @@
 				$sql .= ' INTO';
 			}
 			
-			if($query->type == Query::INSERT || $query->type == Query::UPDATE) {
+			if($query->type == Query::INSERT || $query->type == Query::UPDATE || ($query->type == Query::DELETE && $query->table !== null)) {
 				$sql .= ' '.$query->table;
-				
+			}
+			
+			if($query->type == Query::INSERT || $query->type == Query::UPDATE) {
 				if($query->set) {
 					$sql .= ' SET '.self::_parseSet($query->set);
 				}
