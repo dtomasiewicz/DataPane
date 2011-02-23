@@ -88,15 +88,27 @@
 			$this->values = $values;
 		}
 		
+		public function getSQL($connection = null) {
+			return Data::connection($connection)->getSQL($this);
+		}
+		
 		public function prepare($driver_options = array(), $connection = null) {
 			return Data::connection($connection)->prepare($this, $driver_options);
 		}
 		
-		public function execute($params = array(), $connection = null) {
-			return $this->prepare(array(), $connection)->execute((array)$params);
+		public function execute($params = array(), $connection = null, $driverOptions = array()) {
+			return $this->prepare($driverOptions, $connection)->execute($params);
 		}
 		
-		public function getSQL($connection = null) {
-			return Data::connection($connection)->getSQL($this);
+		public function fetch($params = array(), $connection = null, $driverOptions = array()) {
+			$stmt = $this->prepare($driverOptions, $connection);
+			$stmt->execute($params);
+			return $stmt->fetch();
+		}
+		
+		public function fetchAll($params = array(), $connection = null, $driverOptions = array()) {
+			$stmt = $this->prepare($driverOptions, $connection);
+			$stmt->execute($params);
+			return $stmt->fetchAll();
 		}
 	}

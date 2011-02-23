@@ -59,11 +59,7 @@
 			if(!is_array($set)) {
 				return $set;
 			} else {
-				$sql = '';
-				foreach($set as $key => $value) {
-					$sql .= $key.'='.$value.',';
-				}
-				return rtrim($sql, ',');
+				return implode(',', $set);
 			}
 		}
 		
@@ -77,35 +73,7 @@
 		
 		protected static function _parseFrom($from) {
 			return is_array($from) ? implode(',', $from) : $from;
-		} 
-		/*
-		protected static function _parseConditions($conditions) {
-			if(!count($conditions)) {
-				return null;
-			} elseif(is_string($conditions[0])) {
-				return $conditions[0];
-			} else {
-				$sql = '';
-				$subs = array();
-				for($c = 0; $c < count($conditions); $c++) {
-					if(is_array($conditions[$c])) {
-						$p = self::_parseConditions($conditions[$c]);
-						$sql .= '('.array_shift($p).')';
-						$subs = array_merge($subs, $p);
-					}
-					if($c < count($conditions)-1) {
-						if(is_string($conditions[$i+1])) {
-							$sql .= ' '.$conditions[$i+1].' ';
-							$i++;
-						} else {
-							$sql .= ' AND ';
-						}
-					}
-				}
-				//@todo something with $subs
-				return $sql;
-			}
-		}*/
+		}
 		
 		protected static function _parseConditions($conditions) {
 			if(!is_array($conditions)) {
