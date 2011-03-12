@@ -1,7 +1,7 @@
 <?php
 	namespace DataPane;
 	
-	interface Statement {
+	interface StatementInterface {
 		public function execute($params = array());
 		public function fetch();
 		public function fetchAll();

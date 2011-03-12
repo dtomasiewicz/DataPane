@@ -1,7 +1,7 @@
 <?php
 	namespace DataPane;
 	
-	interface Connection {
+	interface ConnectionInterface {
 		public function lastInsertId();
 		public function prepare($sql);
 	}

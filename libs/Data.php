@@ -20,7 +20,7 @@
 			if (!isset(self::$_connections[$name])) {
 				if (isset(self::$_config['connections'][$name])) {
 					$config = self::$_config['connections'][$name];
-					$class = '\\DataPane\\Driver\\'.$config['driver'].'\\Connection';
+					$class = '\DataPane\Driver\\'.$config['driver'].'\Connection';
 					unset($config['driver']);
 					self::$_connections[$name] = new $class($config);
 				} else {
